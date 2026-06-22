@@ -1,0 +1,104 @@
+{
+  "products": [
+    {
+      "sku": "TS-KB-001",
+      "name": "Logitech G Pro X TKL",
+      "category": "perifericos",
+      "tags": ["teclado", "keyboard", "gaming", "logitech"],
+      "price": 199.00,
+      "stock": 15,
+      "supplier": "Logitech Official",
+      "image": "assets/products/keyboard-logitech.svg"
+    },
+    {
+      "sku": "TS-HS-002",
+      "name": "HyperX Cloud III Wireless",
+      "category": "audio",
+      "tags": ["auriculares", "headset", "audio", "hyperx"],
+      "price": 169.99,
+      "stock": 8,
+      "supplier": "HyperX LATAM",
+      "image": "assets/products/headset-hyperx.svg"
+    },
+    {
+      "sku": "TS-MS-003",
+      "name": "Razer DeathAdder V3",
+      "category": "perifericos",
+      "tags": ["mouse", "gaming", "razer"],
+      "price": 69.99,
+      "stock": 22,
+      "supplier": "Razer Store",
+      "image": "assets/products/mouse-razer.svg"
+    },
+    {
+      "sku": "TS-SSD-004",
+      "name": "Samsung 990 EVO 1TB",
+      "category": "almacenamiento",
+      "tags": ["ssd", "disco", "almacenamiento", "samsung"],
+      "price": 89.00,
+      "stock": 4,
+      "supplier": "Samsung Electronics",
+      "image": "assets/products/ssd-samsung.svg"
+    },
+    {
+      "sku": "TS-CTR-005",
+      "name": "DualSense Wireless Controller",
+      "category": "perifericos",
+      "tags": ["joystick", "control", "gamepad", "dualsense", "playstation"],
+      "price": 74.99,
+      "stock": 0,
+      "supplier": "Sony PlayStation",
+      "image": "assets/products/controller-dualsense.svg"
+    },
+    {
+      "sku": "TS-MN-006",
+      "name": "LG UltraGear 27\" QHD",
+      "category": "monitores",
+      "tags": ["monitor", "pantalla", "lg", "gaming"],
+      "price": 349.00,
+      "stock": 10,
+      "supplier": "LG Electronics",
+      "image": "assets/products/monitor-lg.svg"
+    },
+    {
+      "sku": "TS-NB-007",
+      "name": "ASUS ROG Zephyrus G14",
+      "category": "notebooks",
+      "tags": ["notebook", "laptop", "asus", "gaming"],
+      "price": 1599.00,
+      "stock": 3,
+      "supplier": "ASUS LATAM",
+      "image": "assets/products/notebook-asus-rog.svg"
+    },
+    {
+      "sku": "TS-WC-008",
+      "name": "Razer Kiyo Pro",
+      "category": "perifericos",
+      "tags": ["webcam", "camara", "streaming", "razer"],
+      "price": 99.00,
+      "stock": 1,
+      "supplier": "Razer Store",
+      "image": "assets/products/webcam-razer.svg"
+    },
+    {
+      "sku": "TS-RT-009",
+      "name": "ASUS RT-AX88U Pro",
+      "category": "redes",
+      "tags": ["router", "wifi", "redes", "asus"],
+      "price": 299.99,
+      "stock": 12,
+      "supplier": "ASUS LATAM",
+      "image": "assets/products/router-asus.svg"
+    },
+    {
+      "sku": "TS-RM-010",
+      "name": "Corsair Vengeance 32GB DDR5",
+      "category": "componentes",
+      "tags": ["ram", "memoria", "ddr5", "corsair"],
+      "price": 115.00,
+      "stock": 6,
+      "supplier": "Corsair Official",
+      "image": "assets/products/ram-corsair.svg"
+    }
+  ]
+}

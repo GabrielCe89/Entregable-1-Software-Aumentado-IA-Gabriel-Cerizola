@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechStore AI Toolkit</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#161922; --panel2:#1d2130; --border:#2a2f3d;
+    --text:#e8eaf0; --text2:#9aa0b4; --text3:#6b7185;
+    --purple:#7F77DD; --purple-d:#26215C; --purple-l:#EEEDFE;
+    --teal:#1D9E75; --teal-d:#04342C; --teal-l:#E1F5EE;
+    --coral:#D85A30; --coral-d:#4A1B0C; --coral-l:#FAECE7;
+    --amber:#BA7517; --amber-d:#412402; --amber-l:#FAEEDA;
+    --red:#E24B4A; --red-d:#501313; --red-l:#FCEBEB;
+    --mono: 'SF Mono', 'Consolas', 'Monaco', monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg); color: var(--text);
+    line-height: 1.6;
+  }
+  .wrap{max-width:1040px; margin:0 auto; padding: 40px 24px 80px;}
+
+  header.hero{
+    display:flex; align-items:center; justify-content:space-between; gap:24px;
+    padding-bottom: 32px; border-bottom: 1px solid var(--border); margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .brand{display:flex; align-items:center; gap:14px;}
+  .brand-mark{
+    width:44px; height:44px; border-radius:10px; background: var(--purple);
+    display:flex; align-items:center; justify-content:center; font-weight:700; color:white; font-size:18px;
+    flex-shrink:0;
+  }
+  .brand h1{font-size:22px; font-weight:600; letter-spacing:-0.01em;}
+  .brand p{font-size:13px; color: var(--text2); margin-top:2px;}
+  .badge-status{
+    font-size:12px; padding:6px 14px; border-radius:20px; background: var(--teal-l);
+    color: var(--teal-d); font-weight:600; white-space:nowrap;
+  }
+
+  nav.tabs{
+    display:flex; gap:6px; margin-bottom:32px; overflow-x:auto; padding-bottom:4px;
+  }
+  nav.tabs button{
+    background: transparent; border:1px solid var(--border); color: var(--text2);
+    padding:9px 16px; border-radius:8px; font-size:13.5px; cursor:pointer; white-space:nowrap;
+    transition: all .15s; font-weight:500;
+  }
+  nav.tabs button:hover{ background: var(--panel2); color: var(--text); }
+  nav.tabs button.active{ background: var(--purple); color:white; border-color: var(--purple); }
+
+  section{display:none;}
+  section.active{display:block; animation: fade .25s ease;}
+  @keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+
+  h2.section-title{font-size:19px; font-weight:600; margin-bottom:6px;}
+  p.section-sub{font-size:14px; color:var(--text2); margin-bottom:24px;}
+
+  .card{
+    background: var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:20px 22px; margin-bottom:16px;
+  }
+  .card h3{font-size:15px; font-weight:600; margin-bottom:8px; display:flex; align-items:center; gap:8px;}
+  .card p{font-size:13.5px; color:var(--text2);}
+  .card .label{
+    font-size:11px; text-transform:uppercase; letter-spacing:0.04em; color:var(--text3);
+    margin-bottom:4px; font-weight:600;
+  }
+
+  .grid2{display:grid; grid-template-columns: 1fr 1fr; gap:16px;}
+  @media (max-width:680px){ .grid2{grid-template-columns:1fr;} }
+
+  pre.code{
+    background:#0a0c10; border:1px solid var(--border); border-radius:8px;
+    padding:14px 16px; font-family: var(--mono); font-size:12.5px; color:#c9d1d9;
+    overflow-x:auto; line-height:1.55; margin-top:10px;
+  }
+  .pill{
+    display:inline-block; font-size:11px; padding:3px 10px; border-radius:20px;
+    font-weight:600; margin-right:6px;
+  }
+  .pill-purple{background:var(--purple-l); color:var(--purple-d);}
+  .pill-teal{background:var(--teal-l); color:var(--teal-d);}
+  .pill-coral{background:var(--coral-l); color:var(--coral-d);}
+
+  .check-item{
+    display:flex; align-items:flex-start; gap:12px; padding:12px 0;
+    border-bottom:1px solid var(--border);
+  }
+  .check-item:last-child{border-bottom:none;}
+  .check-icon{
+    width:22px; height:22px; border-radius:6px; background:var(--teal-l); color:var(--teal-d);
+    display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; margin-top:1px;
+  }
+  .check-icon.pending{background:var(--amber-l); color:var(--amber-d);}
+  .check-body strong{font-size:14px; display:block; margin-bottom:2px;}
+  .check-body span{font-size:13px; color:var(--text2);}
+
+  .template{
+    border:1px solid var(--border); border-radius:10px; padding:16px 18px; margin-bottom:12px;
+    background: var(--panel2);
+  }
+  .template-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px; flex-wrap:wrap; gap:6px;}
+  .template-head h4{font-size:14.5px; font-weight:600;}
+  .template-when{font-size:12.5px; color:var(--text2);}
+  .vars{font-size:12px; color:var(--text3); margin:8px 0; font-family:var(--mono);}
+  details{margin-top:8px;}
+  summary{cursor:pointer; font-size:13px; color:var(--purple); font-weight:500; outline:none;}
+  summary:hover{text-decoration:underline;}
+  .example{margin-top:10px; font-size:13px;}
+  .example .ex-label{color:var(--text3); font-size:11px; text-transform:uppercase; letter-spacing:.04em; margin-bottom:2px;}
+  .example .ex-text{background:#0a0c10; border-radius:6px; padding:10px 12px; margin-bottom:8px; color:#c9d1d9; font-family:var(--mono); font-size:12px;}
+
+  .toolbar{display:flex; gap:10px; align-items:center; margin-bottom:16px; flex-wrap:wrap;}
+  button.run-btn{
+    background: var(--purple); color:white; border:none; padding:10px 18px;
+    border-radius:8px; font-size:13.5px; font-weight:600; cursor:pointer; transition:all .15s;
+    display:flex; align-items:center; gap:6px;
+  }
+  button.run-btn:hover{ filter:brightness(1.1); }
+  button.run-btn:active{ transform: scale(0.98); }
+  input.search-input{
+    flex:1; min-width:200px; background:var(--panel2); border:1px solid var(--border);
+    color:var(--text); padding:10px 14px; border-radius:8px; font-size:13.5px;
+  }
+  input.search-input:focus{ outline:none; border-color:var(--purple); }
+
+  .report-out{
+    background:#0a0c10; border:1px solid var(--border); border-radius:10px;
+    padding:18px 20px; font-family: var(--mono); font-size:12.5px; line-height:1.8;
+    min-height:60px; white-space:pre-wrap;
+  }
+  .report-out .row-out{color:var(--red); }
+  .report-out .row-low{color:var(--amber);}
+  .report-out .row-ok{color:var(--teal);}
+  .report-out .head{color:var(--text); font-weight:600;}
+
+  .product-card-result{
+    border:1px solid var(--border); border-radius:10px; padding:16px 18px; background:var(--panel2);
+  }
+  .pr-row{display:flex; justify-content:space-between; padding:6px 0; font-size:13.5px; border-bottom:1px solid var(--border);}
+  .pr-row:last-child{border-bottom:none;}
+  .pr-row span:first-child{color:var(--text2);}
+  .status-tag{font-size:11px; padding:2px 9px; border-radius:12px; font-weight:600;}
+  .status-out{background:var(--red-l); color:var(--red-d);}
+  .status-low{background:var(--amber-l); color:var(--amber-d);}
+  .status-ok{background:var(--teal-l); color:var(--teal-d);}
+
+  .empty-state{color:var(--text3); font-size:13px; text-align:center; padding:24px;}
+  .error-state{
+    border:1px solid var(--red); border-radius:10px; padding:16px 18px;
+    background:var(--coral-l); color:var(--red-d); font-size:13.5px;
+    display:flex; align-items:flex-start; gap:10px;
+  }
+  .error-state i{font-size:18px; margin-top:1px; flex-shrink:0;}
+
+  table.catalog-table{width:100%; border-collapse:collapse; font-size:13px;}
+  table.catalog-table th{
+    text-align:left; color:var(--text3); font-size:11px; text-transform:uppercase;
+    letter-spacing:.03em; padding:8px 10px; border-bottom:1px solid var(--border);
+  }
+  table.catalog-table td{padding:9px 10px; border-bottom:1px solid var(--border);}
+  table.catalog-table tr:last-child td{border-bottom:none;}
+
+  .video-frame{
+    border:1px dashed var(--border); border-radius:12px; padding:48px 24px;
+    text-align:center; color:var(--text3); background:var(--panel2);
+  }
+  .video-frame i{font-size:28px; margin-bottom:10px; display:block;}
+
+  a.repo-link{color:var(--purple); text-decoration:none; font-weight:600; font-size:13.5px;}
+  a.repo-link:hover{text-decoration:underline;}
+
+  footer{
+    margin-top:48px; padding-top:24px; border-top:1px solid var(--border);
+    font-size:12.5px; color:var(--text3); text-align:center;
+  }
+  .dashboard{
+    display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:16px; margin-bottom:32px;
+  }
+  .stat-card{
+    background: var(--panel); border:1px solid var(--border); border-radius:12px; padding:20px;
+    text-align:center; transition: transform 0.2s;
+  }
+  .stat-card:hover{ transform: translateY(-4px); }
+  .stat-val{ font-size:28px; font-weight:700; display:block; margin-bottom:4px; }
+  .stat-label{ font-size:12px; text-transform:uppercase; letter-spacing:0.05em; color:var(--text3); font-weight:600; }
+  .stat-in{ color: var(--teal); }
+  .stat-low{ color: var(--amber); }
+  .stat-out{ color: var(--red); }
+
+  .status-tag-pill{
+    font-size:10px; padding:3px 10px; border-radius:12px; font-weight:700; text-transform:uppercase;
+  }
+  .pill-in{ background: var(--teal-l); color: var(--teal-d); }
+  .pill-low{ background: var(--amber-l); color: var(--amber-d); }
+  .pill-out{ background: var(--red-l); color: var(--red-d); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="brand">
+      <div class="brand-mark">TS</div>
+      <div>
+        <h1>TechStore AI Toolkit</h1>
+        <p>Sistema de asistencia mediante IA para operaciones de e-commerce.</p>
+      </div>
+    </div>
+    <span class="badge-status">5 / 5 entregables completos</span>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="overview">Resumen</button>
+    <button class="tab-btn" data-tab="claude-md">1. CLAUDE.md</button>
+    <button class="tab-btn" data-tab="prompts">2. Prompts</button>
+    <button class="tab-btn" data-tab="skill">3. Skill</button>
+    <button class="tab-btn" data-tab="mcp">4. MCP server</button>
+    <button class="tab-btn" data-tab="demo">5. Video-demo</button>
+  </nav>
+
+  <section id="overview" class="active">
+    <div class="dashboard">
+      <div class="stat-card">
+        <span class="stat-val" id="stat-total">0</span>
+        <span class="stat-label">Total Productos</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-val stat-in" id="stat-in">0</span>
+        <span class="stat-label">En Stock</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-val stat-low" id="stat-low">0</span>
+        <span class="stat-label">Stock Bajo</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-val stat-out" id="stat-out">0</span>
+        <span class="stat-label">Agotados</span>
+      </div>
+    </div>
+
+    <h2 class="section-title">Checklist de entregables</h2>
+    <p class="section-sub">Caso de uso aplicado: catálogo de 10 productos, reporte de stock y consulta MCP en tiempo real.</p>
+
+    <div class="card">
+      <div class="check-item">
+        <div class="check-icon"><i class="ti ti-check"></i></div>
+        <div class="check-body">
+          <strong>1. Repo con CLAUDE.md</strong>
+          <span>Contexto del proyecto + 2 decisiones de diseño documentadas con su trade-off.</span>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon"><i class="ti ti-check"></i></div>
+        <div class="check-body">
+          <strong>2. 5 plantillas de prompt</strong>
+          <span>Cada una con nombre, cuándo usarla, variables y ejemplo real ejecutado.</span>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon"><i class="ti ti-check"></i></div>
+        <div class="check-body">
+          <strong>3. Skill cargable — stock-report</strong>
+          <span>Frontmatter válido. Audita precios/stock del catálogo y genera reporte.</span>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon"><i class="ti ti-check"></i></div>
+        <div class="check-body">
+          <strong>4. MCP server propio</strong>
+          <span>Tool get_product_info — consulta stock/precio por SKU o nombre. Probada sin errores.</span>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon pending"><i class="ti ti-clock"></i></div>
+        <div class="check-body">
+          <strong>5. Video-demo (3 min)</strong>
+          <span>Pendiente de grabación. Se agregará el enlace antes de la entrega final.</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-size:15px; font-weight:600; margin:24px 0 12px;">Catálogo simulado (data/catalog.json)</h3>
+    <div class="card" style="overflow-x:auto;">
+      <table class="catalog-table" id="catalog-table"></table>
+    </div>
+  </section>
+
+  <section id="claude-md">
+    <h2 class="section-title">CLAUDE.md</h2>
+    <p class="section-sub">Contexto del proyecto y decisiones de diseño documentadas.</p>
+
+    <div class="card">
+      <h3><i class="ti ti-file-text"></i> Contexto</h3>
+      <p>TechStore es una tienda online de tecnología. El catálogo real vive en una base de datos productiva; en este repo se simula con <code>data/catalog.json</code> para desarrollar y demostrar sin tocar producción.</p>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <span class="pill pill-purple">Decisión 1</span>
+        <h3 style="margin-top:8px;">Catálogo simulado vía JSON</h3>
+        <p><strong style="color:var(--text);">Qué:</strong> el MCP server y la skill leen catalog.json en vez de la DB productiva.</p>
+        <p style="margin-top:6px;"><strong style="color:var(--text);">Por qué:</strong> reproducible por cualquiera que clone el repo, sin exponer credenciales reales.</p>
+        <p style="margin-top:6px;"><strong style="color:var(--text);">Trade-off:</strong> no refleja stock en tiempo real.</p>
+      </div>
+      <div class="card">
+        <span class="pill pill-teal">Decisión 2</span>
+        <h3 style="margin-top:8px;">Umbral de stock bajo fijo</h3>
+        <p><strong style="color:var(--text);">Qué:</strong> stock ≤ 5 unidades se marca "bajo", igual para todas las categorías.</p>
+        <p style="margin-top:6px;"><strong style="color:var(--text);">Por qué:</strong> simplifica la v1 sin archivo de configuración que nadie mantendría.</p>
+        <p style="margin-top:6px;"><strong style="color:var(--text);">Trade-off:</strong> una notebook con stock 5 alerta igual que un mouse con stock 5.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="prompts">
+    <h2 class="section-title">5 plantillas de prompt</h2>
+    <p class="section-sub">Cada una probada con un caso real del catálogo. Desplegá el ejemplo para ver el output real.</p>
+
+    <div class="template">
+      <div class="template-head">
+        <h4>1. Generador de descripción de producto</h4>
+        <span class="template-when">Al cargar un producto nuevo sin copy de venta</span>
+      </div>
+      <div class="vars">{nombre} · {specs} · {tono}</div>
+      <details>
+        <summary>Ver ejemplo real ejecutado</summary>
+        <div class="example">
+          <div class="ex-label">Input</div>
+          <div class="ex-text">nombre=Monitor Samsung 24" FHD · specs=panel IPS, 75Hz, HDMI+VGA, VESA · tono=cercano y simple</div>
+          <div class="ex-label">Output</div>
+          <div class="ex-text">"Pasá tus horas frente a la pantalla a otro nivel. Este monitor Samsung de 24" con panel IPS te da colores fieles desde cualquier ángulo, y los 75Hz hacen que todo se vea más fluido..."</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="template">
+      <div class="template-head">
+        <h4>2. Reporte de stock bajo (versión prompt)</h4>
+        <span class="template-when">Lectura rápida del catálogo sin correr la skill</span>
+      </div>
+      <div class="vars">{catalogo_json} · {umbral}</div>
+      <details>
+        <summary>Ver ejemplo real ejecutado</summary>
+        <div class="example">
+          <div class="ex-label">Input</div>
+          <div class="ex-text">catálogo completo (10 productos) · umbral=5</div>
+          <div class="ex-label">Output</div>
+          <div class="ex-text">TS-005 (stock 0), TS-007 (stock 1), TS-010 (stock 2), TS-003 (stock 3), TS-008 (stock 5) — ordenados de menor a mayor</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="template">
+      <div class="template-head">
+        <h4>3. Respuesta a ticket de soporte</h4>
+        <span class="template-when">Cliente pregunta por disponibilidad o precio</span>
+      </div>
+      <div class="vars">{producto} · {stock_actual} · {precio} · {nombre_cliente}</div>
+      <details>
+        <summary>Ver ejemplo real ejecutado</summary>
+        <div class="example">
+          <div class="ex-label">Input</div>
+          <div class="ex-text">producto=SSD Kingston NV2 1TB · stock_actual=0 · precio=64.90 · cliente=Marcos</div>
+          <div class="ex-label">Output</div>
+          <div class="ex-text">"Hola Marcos, el SSD Kingston NV2 1TB tiene un precio de USD 64.90, pero por el momento está sin stock. Podemos anotarte para avisarte en cuanto vuelva a estar disponible..."</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="template">
+      <div class="template-head">
+        <h4>4. Changelog de catálogo</h4>
+        <span class="template-when">Después de actualizar precios/stock en lote</span>
+      </div>
+      <div class="vars">{cambios} · {fecha}</div>
+      <details>
+        <summary>Ver ejemplo real ejecutado</summary>
+        <div class="example">
+          <div class="ex-label">Input</div>
+          <div class="ex-text">cambios=[TS-002 precio 17.99→19.99, TS-009 stock 12→40] · fecha=2026-06-15</div>
+          <div class="ex-label">Output</div>
+          <div class="ex-text">Precios: TS-002 (Mouse Logitech G203) 17.99 → 19.99 / Stock: TS-009 (Router TP-Link) 12 → 40</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="template">
+      <div class="template-head">
+        <h4>5. Clasificador de categoría</h4>
+        <span class="template-when">Producto nuevo sin categoría clara</span>
+      </div>
+      <div class="vars">{nombre_producto} · {categorias_existentes}</div>
+      <details>
+        <summary>Ver ejemplo real ejecutado</summary>
+        <div class="example">
+          <div class="ex-label">Input</div>
+          <div class="ex-text">producto=Silla gamer ergonómica 4D · categorías=notebooks, perifericos, monitores...</div>
+          <div class="ex-label">Output</div>
+          <div class="ex-text">"Categoría nueva: mobiliario. Ninguna categoría existente cubre muebles..."</div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section id="skill">
+    <h2 class="section-title">Skill: stock-report</h2>
+    <p class="section-sub">Audita el catálogo y marca productos sin stock o con stock bajo (≤5 unidades). Corré el reporte real abajo.</p>
+
+    <div class="card">
+      <h3><i class="ti ti-file-code"></i> Frontmatter</h3>
+      <pre class="code">---
+name: stock-report
+description: Audita el catálogo de TechStore y genera un
+  reporte de precios y stock, marcando productos con stock
+  bajo (≤5) y sin stock (0). Usar cuando el usuario pida
+  "revisar el stock" o "armar el reporte de catálogo".
+---</pre>
+    </div>
+
+    <h3 style="font-size:15px; font-weight:600; margin:24px 0 10px;">Stock por producto</h3>
+    <div class="card">
+      <div style="position:relative; width:100%; height:300px;">
+        <canvas id="stock-chart" role="img" aria-label="Gráfico de barras del stock por producto, con línea de umbral en 5 unidades">Stock por SKU: ver tabla de catálogo en la sección Resumen.</canvas>
+      </div>
+      <div style="display:flex; gap:18px; margin-top:14px; font-size:12px; color:var(--text2); flex-wrap:wrap;">
+        <span style="display:flex; align-items:center; gap:5px;"><span style="width:10px; height:10px; border-radius:2px; background:var(--teal); display:inline-block;"></span>Ok</span>
+        <span style="display:flex; align-items:center; gap:5px;"><span style="width:10px; height:10px; border-radius:2px; background:var(--amber); display:inline-block;"></span>Stock bajo (≤5)</span>
+        <span style="display:flex; align-items:center; gap:5px;"><span style="width:10px; height:10px; border-radius:2px; background:var(--red); display:inline-block;"></span>Sin stock</span>
+        <span style="display:flex; align-items:center; gap:5px;"><span style="width:14px; height:2px; background:#9aa0b4; display:inline-block;"></span>Umbral (5)</span>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="run-btn" id="run-report-btn"><i class="ti ti-player-play"></i> Correr stock-report</button>
+    </div>
+    <div class="report-out" id="report-output">
+      <span style="color:var(--text3);">Presioná "Correr stock-report" para generar el reporte sobre el catálogo real.</span>
+    </div>
+  </section>
+
+  <section id="mcp">
+    <h2 class="section-title">MCP server: get_product_info</h2>
+    <p class="section-sub">Consulta stock y precio por SKU exacto o nombre parcial. Probá con "TS-005", "monitor samsung" o "tostadora".</p>
+
+    <div class="toolbar">
+      <input class="search-input" id="mcp-query" type="text" placeholder="SKU (ej. TS-005) o nombre de producto...">
+      <button class="run-btn" id="mcp-run-btn"><i class="ti ti-search"></i> Consultar</button>
+    </div>
+    <label style="display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--text2); margin-bottom:16px; cursor:pointer;">
+      <input type="checkbox" id="simulate-error" style="width:auto;">
+      Simular caída del servidor (timeout)
+    </label>
+    <div id="mcp-output">
+      <div class="empty-state">Ingresá un SKU o nombre para consultar el catálogo.</div>
+    </div>
+
+    <h3 style="font-size:15px; font-weight:600; margin:24px 0 10px;">Log de prueba real (test-client.js)</h3>
+    <div class="card">
+      <p>Ejecutado el 2026-06-16 — 3/3 casos OK, sin errores de conexión.</p>
+      <pre class="code">$ node test-client.js
+
+TEST 1: get_product_info("TS-005")
+→ { sku: "TS-005", stock: 0, estado: "sin stock" }
+
+TEST 2: get_product_info("monitor samsung")
+→ { sku: "TS-004", stock: 7, estado: "disponible" }
+
+TEST 3: get_product_info("tostadora")
+→ "No se encontró ningún producto..."</pre>
+    </div>
+  </section>
+
+  <section id="demo">
+    <h2 class="section-title">Video-demo (3 min)</h2>
+    <p class="section-sub">Flujo real en terminal, sin slides.</p>
+
+    <div class="video-frame">
+      <i class="ti ti-video"></i>
+      <a href="https://www.youtube.com/watch?v=JI24tJZvXhs" target="_blank" rel="noopener noreferrer">Ver video de demostración</a>
+    </div>
+
+    <h3 style="font-size:15px; font-weight:600; margin:24px 0 10px;"></h3>
+    <div class="card">
+      <p>✓ Presentación general del repositorio.</p>
+      <p style="margin-top:6px;">✓ Explicación de CLAUDE.md y decisiones de diseño.</p>
+      <p style="margin-top:6px;">✓ Recorrido por las plantillas de prompts.</p>
+      <p style="margin-top:6px;">✓ Demostración de la skill stock-report.</p>
+      <p style="margin-top:6px;">✓ Prueba del MCP Server.</p>
+      <p style="margin-top:6px;">✓ Uso de la demo TechStore AI Toolkit.</p>
+    </div>
+  </section>
+
+  <footer>
+    Repo: <a class="repo-link" href="#">github.com/tu-usuario/techstore</a> — generado como entregable del curso de AI-augmented development
+  </footer>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.44.0/iconfont/tabler-icons.min.css"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const CATALOG = [
+  { "sku": "TS-KB-001", "name": "Logitech G Pro X TKL", "category": "teclado", "price": 199.00, "stock": 15, "supplier": "Logitech Official", "image": "assets/products/keyboard-logitech.svg" },
+
+  { "sku": "TS-HS-002", "name": "HyperX Cloud III Wireless", "category": "auriculares", "price": 169.99, "stock": 8, "supplier": "HyperX LATAM", "image": "assets/products/headset-hyperx.svg" },
+
+  { "sku": "TS-MS-003", "name": "Razer DeathAdder V3", "category": "mouse", "price": 69.99, "stock": 22, "supplier": "Razer Store", "image": "assets/products/mouse-razer.svg" },
+
+  { "sku": "TS-SSD-004", "name": "Samsung 990 EVO 1TB", "category": "ssd", "price": 89.00, "stock": 4, "supplier": "Samsung Electronics", "image": "assets/products/ssd-samsung.svg" },
+
+  { "sku": "TS-CTR-005", "name": "DualSense Wireless Controller", "category": "control", "price": 74.99, "stock": 0, "supplier": "Sony PlayStation", "image": "assets/products/controller-dualsense.svg" },
+
+  { "sku": "TS-MN-006", "name": "LG UltraGear 27\" QHD", "category": "monitor", "price": 349.00, "stock": 10, "supplier": "LG Electronics", "image": "assets/products/monitor-lg.svg" },
+
+  { "sku": "TS-NB-007", "name": "ASUS ROG Zephyrus G14", "category": "notebook", "price": 1599.00, "stock": 3, "supplier": "ASUS LATAM", "image": "assets/products/notebook-asus-rog.svg" },
+
+  { "sku": "TS-WC-008", "name": "Razer Kiyo Pro", "category": "webcam", "price": 99.00, "stock": 1, "supplier": "Razer Store", "image": "assets/products/webcam-razer.svg" },
+
+  { "sku": "TS-RT-009", "name": "ASUS RT-AX88U Pro", "category": "router", "price": 299.99, "stock": 12, "supplier": "ASUS LATAM", "image": "assets/products/router-asus.svg" },
+
+  { "sku": "TS-RM-010", "name": "Corsair Vengeance 32GB DDR5", "category": "ram", "price": 115.00, "stock": 6, "supplier": "Corsair Official", "image": "assets/products/ram-corsair.svg" }
+];
+const LOW_STOCK_THRESHOLD = 5;
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+function classify(p){
+  if (p.stock === 0) return 'sin_stock';
+  if (p.stock <= LOW_STOCK_THRESHOLD) return 'stock_bajo';
+  return 'ok';
+}
+
+function updateDashboard(){
+  const total = CATALOG.length;
+  const sinStock = CATALOG.filter(p => classify(p) === 'sin_stock').length;
+  const stockBajo = CATALOG.filter(p => classify(p) === 'stock_bajo').length;
+  const ok = CATALOG.filter(p => classify(p) === 'ok').length;
+
+  document.getElementById('stat-total').innerText = total;
+  document.getElementById('stat-in').innerText = ok;
+  document.getElementById('stat-low').innerText = stockBajo;
+  document.getElementById('stat-out').innerText = sinStock;
+}
+
+function renderCatalogTable(){
+  const table = document.getElementById('catalog-table');
+  let html = '<tr><th>SKU</th><th>Producto</th><th>Precio</th><th>Stock</th><th>Estado</th></tr>';
+  CATALOG.forEach(p => {
+    const status = classify(p);
+    let statusHtml = '';
+    if(status === 'ok') statusHtml = '<span class="status-tag-pill pill-in">En Stock</span>';
+    else if(status === 'stock_bajo') statusHtml = '<span class="status-tag-pill pill-low">Bajo Stock</span>';
+    else statusHtml = '<span class="status-tag-pill pill-out">Agotado</span>';
+
+    html += `<tr>
+      <td><code style="font-family:var(--mono); font-size:11px;">${p.sku}</code></td>
+      <td style="display:flex; align-items:center; gap:12px;">
+        <img src="${p.image}" alt="${p.name}" style="width:48px; height:48px; border-radius:6px; background:var(--panel2); object-fit:contain; flex-shrink:0;">
+        <span>${p.name}</span>
+      </td>
+      <td>$${p.price.toFixed(2)}</td>
+      <td>${p.stock}</td>
+      <td>${statusHtml}</td>
+    </tr>`;
+  });
+  table.innerHTML = html;
+  updateDashboard();
+}
+renderCatalogTable();
+
+function renderStockChart(){
+  const labels = CATALOG.map(p => p.sku.replace('TS-', ''));
+  const data = CATALOG.map(p => p.stock);
+  const colors = CATALOG.map(p => {
+    const cls = classify(p);
+    if (cls === 'sin_stock') return '#E24B4A';
+    if (cls === 'stock_bajo') return '#BA7517';
+    return '#1D9E75';
+  });
+
+  new Chart(document.getElementById('stock-chart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Stock',
+          data,
+          backgroundColor: colors,
+          borderRadius: 4,
+        },
+        {
+          label: 'Umbral de stock bajo',
+          data: labels.map(() => LOW_STOCK_THRESHOLD),
+          type: 'line',
+          borderColor: '#9aa0b4',
+          borderDash: [5, 5],
+          borderWidth: 1.5,
+          pointRadius: 0,
+          fill: false,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: (items) => CATALOG[items[0].dataIndex].name,
+            label: (item) => `Stock: ${item.parsed.y} unidades`,
+          },
+        },
+      },
+      scales: {
+        x: { ticks: { color: '#9aa0b4', font: { size: 11 } }, grid: { display: false } },
+        y: {
+          beginAtZero: true,
+          ticks: { color: '#9aa0b4', font: { size: 11 }, precision: 0 },
+          grid: { color: '#2a2f3d' },
+        },
+      },
+    },
+  });
+}
+renderStockChart();
+
+function classify(p){
+  if (p.stock === 0) return 'sin_stock';
+  if (p.stock <= LOW_STOCK_THRESHOLD) return 'stock_bajo';
+  return 'ok';
+}
+
+document.getElementById('run-report-btn').addEventListener('click', () => {
+  const sinStock = CATALOG.filter(p => classify(p) === 'sin_stock');
+  const stockBajo = CATALOG.filter(p => classify(p) === 'stock_bajo').sort((a,b) => a.stock - b.stock);
+  const ok = CATALOG.filter(p => classify(p) === 'ok');
+  const today = new Date().toISOString().slice(0,10);
+
+  let out = `<span class="head">📦 Reporte de stock — TechStore (${today})</span>\n\n`;
+  out += `<span class="row-out">🔴 SIN STOCK (${sinStock.length})</span>\n`;
+  sinStock.forEach(p => { out += `  ${p.sku} — ${p.name} — proveedor: ${p.supplier}\n`; });
+  out += `\n<span class="row-low">🟡 STOCK BAJO (${stockBajo.length})</span>\n`;
+  stockBajo.forEach(p => { out += `  ${p.sku} — ${p.name} — ${p.stock} unidad(es) — ${p.supplier}\n`; });
+  out += `\n<span class="row-ok">🟢 OK (${ok.length} productos restantes)</span>`;
+
+  document.getElementById('report-output').innerHTML = out;
+});
+
+function findProduct(query){
+  const q = query.trim().toLowerCase();
+  if (!q) return null;
+
+  const bySku = CATALOG.find(p => p.sku.toLowerCase() === q);
+  if (bySku) return bySku;
+
+  return CATALOG.find(
+    p =>
+      p.name.toLowerCase().includes(q) ||
+      p.category.toLowerCase().includes(q)
+  );
+}
+
+function runMcpQuery(){
+  const query = document.getElementById('mcp-query').value;
+  const out = document.getElementById('mcp-output');
+  const simulateError = document.getElementById('simulate-error').checked;
+
+  if (simulateError){
+    out.innerHTML = `
+      <div class="error-state">
+        <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+        <div>
+          <strong style="display:block; margin-bottom:2px;">Error: timeout al conectar con techstore-mcp-server</strong>
+          El cliente esperó 10s sin respuesta del servidor. Reintentá la consulta o verificá que el proceso esté corriendo (<code>node mcp-server/src/index.js</code>).
+        </div>
+      </div>`;
+    return;
+  }
+
+  const product = findProduct(query);
+
+  if (!query.trim()){
+    out.innerHTML = '<div class="empty-state">Ingresá un SKU o nombre para consultar el catálogo.</div>';
+    return;
+  }
+  if (!product){
+    out.innerHTML = `<div class="empty-state">No se encontró ningún producto que coincida con "${query}".</div>`;
+    return;
+  }
+  const estado = product.stock === 0 ? 'sin stock' : (product.stock <= LOW_STOCK_THRESHOLD ? 'stock bajo' : 'disponible');
+  const statusClass = product.stock === 0 ? 'status-out' : (product.stock <= LOW_STOCK_THRESHOLD ? 'status-low' : 'status-ok');
+
+  out.innerHTML = `
+    <div class="product-card-result" style="display:flex; gap:16px; align-items:center;">
+      <img src="${product.image}" alt="${product.name}" style="width:80px; height:80px; border-radius:8px; background:var(--panel); object-fit:contain;">
+      <div style="flex:1;">
+        <div class="pr-row"><span>SKU</span><span>${product.sku}</span></div>
+        <div class="pr-row"><span>Producto</span><span>${product.name}</span></div>
+        <div class="pr-row"><span>Precio</span><span>$${product.price.toFixed(2)}</span></div>
+        <div class="pr-row"><span>Stock</span><span>${product.stock} unidades</span></div>
+        <div class="pr-row"><span>Estado</span><span class="status-tag ${statusClass}">${estado}</span></div>
+        <div class="pr-row"><span>Proveedor</span><span>${product.supplier}</span></div>
+      </div>
+    </div>`;
+}
+document.getElementById('mcp-run-btn').addEventListener('click', runMcpQuery);
+document.getElementById('mcp-query').addEventListener('keydown', (e) => { if (e.key === 'Enter') runMcpQuery(); });
+</script>
+</body>
+</html>
+
+</body>
+</html>

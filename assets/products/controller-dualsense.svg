@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <rect width="100" height="100" fill="#2a2f3d" rx="8" />
+  <rect x="20" y="45" width="25" height="15" rx="5" fill="#7F77DD" />
+  <rect x="55" y="45" width="25" height="15" rx="5" fill="#7F77DD" />
+  <rect x="35" y="40" width="30" height="25" rx="10" fill="#7F77DD" />
+  <text x="50" y="85" font-family="Arial" font-size="8" fill="#9aa0b4" text-anchor="middle">CONTROLLER</text>
+</svg>

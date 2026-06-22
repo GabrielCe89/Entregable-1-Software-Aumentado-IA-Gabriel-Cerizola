@@ -1,0 +1,13 @@
+{
+  "name": "techstore-ai-toolkit",
+  "version": "1.0.0",
+  "description": "Sistema de asistencia mediante IA para operaciones de e-commerce.",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  }
+}
