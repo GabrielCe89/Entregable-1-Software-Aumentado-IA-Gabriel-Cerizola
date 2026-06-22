@@ -10,7 +10,9 @@ Este repositorio contiene un ecosistema de herramientas diseñado para optimizar
 - [x] 2. 5 plantillas de prompt individuales en `prompts/`, con ejemplos reales ejecutados.
 - [x] 3. Skill `stock-report` — Audita `data/catalog.json` y genera reportes de inventario.
 - [x] 4. MCP Server — Tool `get_product_info` para consulta de stock y precios en tiempo real.
-- [ ] 5. Video-demo (3 min) — Pendiente de grabación. Se agregará el enlace antes de la entrega final.
+- [x] 5. Video Demo
+
+https://www.youtube.com/watch?v=JI24tJZvXhs
 
 ## Demo Visual
 
@@ -62,3 +64,4 @@ npm start
 2. **Auditoría:** La skill `stock-report` genera un informe detallado para el equipo.
 3. **Consulta:** El agente de IA utiliza el MCP para obtener datos precisos de productos.
 4. **Respuesta:** Se aplican los prompts optimizados para generar contenido o responder tickets de soporte con datos reales.
+5. Video-demo (5 min) — Disponible en el enlace incluido en este README.
